@@ -18,7 +18,7 @@ namespace BoilerplateProject.Orders.Dto
         {
             if (HasDuplicates(OrderedProducts))
             {
-                context.Results.Add(new ValidationResult("All ordered products must have an unique id"));
+                context.Results.Add(new ValidationResult("All ordered products must be unique"));
             }
             if (!SatisfyAmount(OrderedProducts))
             {
@@ -32,8 +32,9 @@ namespace BoilerplateProject.Orders.Dto
 
         protected bool HasDuplicates(List<CreateOrderedProductDto> originalList)
         {
-            var distinctList = originalList.DistinctBy(o => o.ProductId).ToList();
-            return distinctList.Count() < originalList.Count ? true : false;
+            return originalList
+                .GroupBy(p => p.ProductId)
+                .Any(g => g.Count() > 1);
         }
 
         protected bool SatisfyAmount(List<CreateOrderedProductDto> orderedProducts)

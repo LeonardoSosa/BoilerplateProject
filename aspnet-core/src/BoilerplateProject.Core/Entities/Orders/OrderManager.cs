@@ -2,7 +2,6 @@
 using Abp.Domain.Services;
 using Abp.UI;
 using BoilerplateProject.Entities.Products;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +27,34 @@ namespace BoilerplateProject.Entities.Orders
 
             List<string> errors = [];
 
-            if(!AreActive(order.OrderedProducts, products))
-            {
-                errors.Add("All products must be active");
-            }
-            if(!SatisfyStock(order.OrderedProducts, products))
-            {
-                errors.Add("The products' amount can't be greater than the stock");
+            if (!DoExist(order.OrderedProducts, products)) {
+                errors.Add("All products must exist");
+            } else {
+                if (!AreActive(order.OrderedProducts, products))
+                {
+                    errors.Add("All products must be active");
+                }
+                if (!SatisfyStock(order.OrderedProducts, products))
+                {
+                    errors.Add("The products' amount can't be greater than the stock");
+                }
             }
 
             ThrowIfAny(errors);
+        }
+
+        protected bool DoExist(List<OrderedProduct> orderedProducts, List<Product> products)
+        {
+            foreach (var o in orderedProducts)
+            {
+                //var product = _productRepository.Get(o.ProductId);
+                var product = products.Find(p => p.Id == o.ProductId);
+                if (product == null)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         protected bool AreActive(List<OrderedProduct> orderedProducts, List<Product> products)
@@ -46,7 +63,7 @@ namespace BoilerplateProject.Entities.Orders
             {
                 //var product = _productRepository.Get(o.ProductId);
                 var product = products.Find(p => p.Id == o.ProductId);
-                if(!product.IsActive)
+                if (!product.IsActive)
                 {
                     return false;
                 }

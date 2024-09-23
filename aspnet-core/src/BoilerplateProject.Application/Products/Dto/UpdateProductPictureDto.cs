@@ -1,14 +1,14 @@
 ﻿using Abp.AutoMapper;
+using Abp.Runtime.Validation;
 using BoilerplateProject.Entities.Products;
 using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
 
 namespace BoilerplateProject.Products.Dto
 {
     [AutoMapTo(typeof(ProductPicture))]
-    public class CreateProductPictureDto
+    public class UpdateProductPictureDto
     {
-        [Required]
-        public IFormFile PictureFile { get; set; }
+        [DisableValidation]
+        public IFormFile? PictureFile { get; set; }
     }
 }

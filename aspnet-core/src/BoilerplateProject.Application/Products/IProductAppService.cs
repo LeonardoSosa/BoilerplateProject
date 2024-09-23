@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BoilerplateProject.Products
 {
-    public interface IProductAppService : IAsyncCrudAppService<ProductDto, int, PagedProductResultRequestDto, CreateProductDto, ProductDto>
+    public interface IProductAppService : IAsyncCrudAppService<ProductDto, int, PagedProductResultRequestDto, CreateProductDto, UpdateProductDto>
     {
     }
 }

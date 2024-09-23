@@ -3,21 +3,23 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { FileParameter, ProductServiceProxy } from '@shared/service-proxies/service-proxies';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
-class CreateProductDto {
+class UpdateProductDto {
+  id: number;
   name: string;
   price: number;
-  stockAmount: number | null;
+  stockAmount: number;
   isActive: boolean;
-  picture: FileParameter;
+  picture: FileParameter | null;
 }
 
 @Component({
-  selector: 'app-create-product-dialog',
-  templateUrl: './create-product-dialog.component.html'
+  selector: 'app-edit-product-dialog',
+  templateUrl: './edit-product-dialog.component.html',
 })
-export class CreateProductDialogComponent extends AppComponentBase implements OnInit {
+export class EditProductDialogComponent extends AppComponentBase implements OnInit{
+  id: number;
   saving = false;
-  product = new CreateProductDto();
+  product = new UpdateProductDto();
   selectedFile: File;
 
   @Output() onSave = new EventEmitter<any>();
@@ -31,12 +33,16 @@ export class CreateProductDialogComponent extends AppComponentBase implements On
   }
 
   ngOnInit(): void {
-    this.product.isActive = true;
+    this._productService.get(this.id)
+    .subscribe(result => {
+      Object.assign(this.product, result)
+    })
   }
 
   onFileChange(event) {
     this.selectedFile = event.target.files ? event.target.files[0] : null;
   }
+
 
   save(): void {
     this.saving = true;
@@ -48,15 +54,16 @@ export class CreateProductDialogComponent extends AppComponentBase implements On
       };
     }
 
-    this._productService.create(
+    this._productService.update(
       this.product.name,
       this.product.price,
       this.product.stockAmount,
       this.product.isActive,
-      this.product.picture
+      this.product.picture,
+      this.product.id
     ).subscribe(
       () => {
-        this.notify.success(this.l('SavedSuccessfully'));
+        this.notify.info(this.l('SuccessfullyUpdatedProduct'));
         this.bsModalRef.hide();
         this.onSave.emit();
       },

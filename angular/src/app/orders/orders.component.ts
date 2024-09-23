@@ -1,11 +1,12 @@
 import { Component, Injector } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { PagedListingComponentBase, PagedRequestDto } from '@shared/paged-listing-component-base';
-import { OrderDto, OrderDtoPagedResultDto, OrderServiceProxy, UserServiceProxy } from '@shared/service-proxies/service-proxies';
+import { OrderDto, OrderDtoPagedResultDto, OrderServiceProxy } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { CreateOrderDialogComponent } from './create-order/create-order-dialog.component';
 import { OrderDetailsDialogComponent } from './order-details/order-details-dialog.component';
 import { finalize } from 'rxjs/operators';
+import { EditOrderDialogComponent } from './edit-order/edit-order-dialog.component';
 
 class PagedOrdersRequestDto extends PagedRequestDto {
   keyword: string;
@@ -18,7 +19,7 @@ class PagedOrdersRequestDto extends PagedRequestDto {
 })
 export class OrdersComponent extends PagedListingComponentBase<OrderDto>{
   orders: OrderDto[] = [];
-  keyword = '';
+  keywordFilter = '';
   advancedFiltersVisible = false;
 
   constructor(
@@ -30,7 +31,11 @@ export class OrdersComponent extends PagedListingComponentBase<OrderDto>{
   }
 
   createOrder(): void {
-    this.ShowCreateOrderDialog();
+    this.showCreateOrEditOrderDialog();
+  }
+
+  editOrder(order: OrderDto): void {
+    this.showCreateOrEditOrderDialog(order.id);
   }
 
   protected list(
@@ -38,7 +43,7 @@ export class OrdersComponent extends PagedListingComponentBase<OrderDto>{
     pageNumber: number,
     finishedCallback: Function
   ): void {
-    request.keyword = this.keyword;
+    request.keyword = this.keywordFilter;
 
     this._orderService
       .getAll(
@@ -73,21 +78,37 @@ export class OrdersComponent extends PagedListingComponentBase<OrderDto>{
   }
 
   getOrderDetails(order: OrderDto): void {
-    this.ShowOrderDetailsDialog(order);
+    this.showOrderDetailsDialog(order);
   }
 
-  ShowCreateOrderDialog(): void {
-    let createOrderDialog: BsModalRef;
-    createOrderDialog = this._modalService.show(CreateOrderDialogComponent, {
-      class: "modal-lg",
-    });
+  showCreateOrEditOrderDialog(id?: number): void {
+    let createOrEditOrderDialog: BsModalRef;
 
-    createOrderDialog.content.onSave.subscribe(() => {
+    if (!id) {
+      createOrEditOrderDialog = this._modalService.show(
+        CreateOrderDialogComponent,
+        {
+          class: 'modal-lg',
+        }
+      );
+    } else {
+      createOrEditOrderDialog = this._modalService.show(
+        EditOrderDialogComponent,
+        {
+          class: 'modal-lg',
+          initialState: {
+            id: id,
+          },
+        }
+      ); 
+    }
+
+    createOrEditOrderDialog.content.onSave.subscribe(() => {
       this.refresh();
     });
   }
 
-  ShowOrderDetailsDialog(order: OrderDto): void {
+  showOrderDetailsDialog(order: OrderDto): void {
     let OrderDetailsDialog: BsModalRef;
     OrderDetailsDialog = this._modalService.show(OrderDetailsDialogComponent, {
       class: "modal-lg",
@@ -98,7 +119,7 @@ export class OrdersComponent extends PagedListingComponentBase<OrderDto>{
   }
 
   clearFilters(): void {
-    this.keyword = '';
+    this.keywordFilter = '';
     this.getDataPage(1);
   }
 }

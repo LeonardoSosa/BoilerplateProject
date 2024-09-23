@@ -113,6 +113,7 @@
 	<text name="StockAmount" value="Estoque" />
 	<text name="CreateNewProduct" value="Novo Produto" />
 	<text name="ProductDeleteWarningMessage">O produto '{0}' será excluído.</text>
+	<text name="OrderedProductDeleteWarningMessage">O produto '{0}' será excluído do pedido.</text>
 
 	<text name="OrderId" value="Id" />
 	<text name="Orders" value="Pedidos" />
@@ -135,7 +136,13 @@
 	<text name="SearchByField" value="Buscar por campo" />
 	<text name="MinimunStockError" value="A quantidade solicitada é maior que o estoque disponível" />
 	<text name="DuplicateProductError" value="O produto já foi incluso no pedido: {Produto: {0}, Preço unitário: {1}, Quantidade: {2}}" />
-	<text name="SuccessfullyUpdatedProduct" value="O produto {0} foi atualizado com sucesso" />
-	<text name="AreYouSureWantToUpdateProduct" value="Deseja atualizar o produto {0}?" />st
+	<text name="SuccessfullyUpdatedProduct" value="O produto foi atualizado com sucesso" />
+	<text name="AreYouSureWantToUpdateProduct" value="Deseja atualizar o produto {0}?" />
+	<text name="EditProduct" value="Editar produto" />
+	<text name="ProductId" value="Id" />
+	<text name="Picture" value="Imagem" />
+
+	<text name="EditOrder" value="Editar pedido" />
+	<text name="SuccessfullyUpdatedOrder" value="O pedido foi atualizado com sucesso" />
   </texts>
 </localizationDictionary>

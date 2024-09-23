@@ -16,7 +16,7 @@ namespace BoilerplateProject.Products.Dto
         [Required]
         public bool IsActive { get; set; }
         [Required]
-        public CreateProductPictureDto Picture { get; set; }
+        public CreateProductPictureDto ProductPicture { get; set; }
 
         public void AddValidationErrors(CustomValidationContext context)
         {

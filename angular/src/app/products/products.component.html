@@ -36,7 +36,7 @@
                                         class="form-control"
                                         name="keyword"
                                         [placeholder]="'SearchWithThreeDot' | localize"
-                                        [(ngModel)]="keyword"
+                                        [(ngModel)]="keywordFilter"
                                         (keyup.enter)="getDataPage(1)"
                                 />
                                 <div class="input-group-append">
@@ -71,7 +71,7 @@
                                                             class="custom-control-input"
                                                             id="isActiveAll"
                                                             name="isActive"
-                                                            [(ngModel)]="isActive"
+                                                            [(ngModel)]="isActiveFilter"
                                                             [value]="undefined"
                                                             checked
                                                     />
@@ -85,7 +85,7 @@
                                                             class="custom-control-input"
                                                             id="isActiveActive"
                                                             name="isActive"
-                                                            [(ngModel)]="isActive"
+                                                            [(ngModel)]="isActiveFilter"
                                                             [value]="true"
                                                     />
                                                     <label
@@ -101,7 +101,7 @@
                                                             class="custom-control-input"
                                                             id="isActivePassive"
                                                             name="isActive"
-                                                            [(ngModel)]="isActive"
+                                                            [(ngModel)]="isActiveFilter"
                                                             [value]="false"
                                                     />
                                                     <label
@@ -158,29 +158,38 @@
                                         itemsPerPage: pageSize,
                                         currentPage: pageNumber,
                                         totalItems: totalItems
-                                        }
+                                        };
+                                let i = index
                                 "
                             >
-                                <td><div class="overflow-auto"><img class="h-100 w-100" [src]="loadPicture(product.id)"></div></td>
+                                <td><div class="overflow-auto"><img class="img-fluid img-thumbnail img-responsive" [src]="picturesBase64[i]" alt="{{ product.name }}"></div></td>
                                 <td>{{ product.name }}</td>
                                 <td>R${{ product.price }}</td>
                                 <td>{{ product.stockAmount }}</td>
                                 <td>
                                     <div class="custom-control custom-checkbox">
                                         <input
-                                                type="checkbox"
-                                                class="custom-control-input"
-                                                disabled
-                                                [checked]="product.isActive"
+                                            type="checkbox"
+                                            class="custom-control-input"
+                                            disabled
+                                            [checked]="product.isActive"
                                         />
                                         <label class="custom-control-label"></label>
                                     </div>
                                 </td>
                                 <td>
                                     <button
-                                            type="button"
-                                            class="btn btn-sm bg-danger mx-2"
-                                            (click)="delete(product)"
+                                        type="button"
+                                        class="btn btn-sm bg-secondary"
+                                        (click)="editProduct(product)"
+                                    >
+                                        <i class="fas fa-pencil-alt"></i>
+                                        {{ "Edit" | localize }}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm bg-danger mx-2"
+                                        (click)="delete(product)"
                                     >
                                         <i class="fas fa-trash"></i>
                                         {{ "Delete" | localize }}

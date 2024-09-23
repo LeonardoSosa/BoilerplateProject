@@ -23,10 +23,22 @@ namespace BoilerplateProject.Entities.Orders
             Total = 0.0;
         }
 
+        public void UpdateProperties(long userId)
+        {
+            this.UserId = userId;
+            this.TotalItems = 0;
+            this.Total = 0;
+            foreach (var item in this.OrderedProducts)
+            {
+                TotalItems += item.Amount;
+                Total += item.Subtotal;
+            }
+        }
+
         // Use only when creating a new Order
         public void AddOrderedProduct(OrderedProduct input)
         {
-            input.OrderId = Id;             // pega Id da entidade (Order) no backend, antes de salvar na DB
+            input.OrderId = Id;
             OrderedProducts.Add(input);
             TotalItems += input.Amount;
             Total += input.Subtotal;

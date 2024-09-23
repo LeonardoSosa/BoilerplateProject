@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BoilerplateProject.Migrations
 {
     [DbContext(typeof(BoilerplateProjectDbContext))]
-    [Migration("20240909141037_Initial")]
+    [Migration("20240912135435_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -1682,8 +1682,11 @@ namespace BoilerplateProject.Migrations
                     b.Property<string>("ContentType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("PictureContent")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<string>("FileName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");

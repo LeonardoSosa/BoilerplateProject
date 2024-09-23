@@ -7,21 +7,20 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 
 @Component({
   selector: 'app-create-order-dialog',
-  templateUrl: './create-order-dialog.component.html'
+  templateUrl: './create-order-dialog.component.html',
 })
 export class CreateOrderDialogComponent extends AppComponentBase implements OnInit {
   saving = false;
   order = new CreateOrderDto();
   orderedNames: string[] = [];
-  activeProducts: ProductDto[];       // possibleProducts, activeProducts
+  activeProducts: ProductDto[];
 
   orderedProduct = new CreateOrderedProductDto();
 
   @Output() onSave = new EventEmitter<any>();
-  @ViewChild('createOrderedProductForm') createForm: NgForm;
+  @ViewChild('CreateOrderedProductForm') createForm: NgForm;
   @ViewChild('CreateOrderTabset') tabset: TabsetComponent;
   @ViewChild('SelectInput') selectInput: ElementRef;
-  @ViewChild('UnitPriceInput') unitPriceInput: ElementRef;
 
   constructor(
     injector: Injector,
@@ -63,12 +62,11 @@ export class CreateOrderDialogComponent extends AppComponentBase implements OnIn
   }
 
   addOrderedProduct(): void {
-    let orderedName = this.selectInput.nativeElement.options[this.selectInput.nativeElement.options.selectedIndex].text;
+    let inputOptions = this.selectInput.nativeElement.options
+    let orderedName = inputOptions[inputOptions.selectedIndex].text;
 
-    // amount has to be int
+    // validate amount
     this.orderedProduct.amount = Math.floor(this.orderedProduct.amount);
-
-    // validate stock
     if (this.orderedProduct.amount > this.activeProducts[this.selectInput.nativeElement.options.selectedIndex].stockAmount) {
       abp.message.error(
         this.l('MinimunStockError')
@@ -85,7 +83,7 @@ export class CreateOrderDialogComponent extends AppComponentBase implements OnIn
           (result: boolean) => {
             if (result) {
               Object.assign(
-                this.order.orderedProducts.find(x => x.productId = this.orderedProduct.productId),
+                this.order.orderedProducts.find(x => x.productId === this.orderedProduct.productId),
                 this.orderedProduct
               )
               this.resetTabAndForm("SuccessfullyUpdatedProduct", orderedName);
@@ -101,8 +99,9 @@ export class CreateOrderDialogComponent extends AppComponentBase implements OnIn
     this.resetTabAndForm("SuccessfullyAddedProduct", orderedName);
   }
 
-  autocompleteUnitPrice(): void {
-    this.createForm.controls['unitPrice'].setValue(this.activeProducts[this.selectInput.nativeElement.options.selectedIndex].price);
+  protected autocompleteUnitPrice(): void {
+    let selectedPrice = this.activeProducts[this.selectInput.nativeElement.options.selectedIndex].price;
+    this.createForm.controls['unitPrice'].setValue(selectedPrice);
   }
 
   protected resetTabAndForm(message, interpolated?):void {

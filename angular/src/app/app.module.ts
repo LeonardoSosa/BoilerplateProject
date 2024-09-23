@@ -31,9 +31,11 @@ import { ResetPasswordDialogComponent } from './users/reset-password/reset-passw
 // products
 import { ProductsComponent } from '@app/products/products.component';
 import { CreateProductDialogComponent } from '@app/products/create-product/create-product-dialog.component';
+import { EditProductDialogComponent } from '@app/products/edit-product/edit-product-dialog.component';
 // orders
 import { OrdersComponent } from '@app/orders/orders.component';
 import { CreateOrderDialogComponent } from '@app/orders/create-order/create-order-dialog.component';
+import { EditOrderDialogComponent } from '@app/orders/edit-order/edit-order-dialog.component';
 import { OrderDetailsDialogComponent } from '@app/orders/order-details/order-details-dialog.component';
 // layout
 import { HeaderComponent } from './layout/header.component';
@@ -68,9 +70,11 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
         // products
         ProductsComponent,
         CreateProductDialogComponent,
+        EditProductDialogComponent,
         // orders
         OrdersComponent,
         CreateOrderDialogComponent,
+        EditOrderDialogComponent,
         OrderDetailsDialogComponent,
         // layout
         HeaderComponent,

@@ -1,9 +1,11 @@
 ﻿using Abp.AutoMapper;
 using Abp.BlobStoring;
 using Abp.BlobStoring.FileSystem;
+using Abp.Dependency;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using BoilerplateProject.Authorization;
+using BoilerplateProject.Products;
 
 namespace BoilerplateProject
 {
@@ -30,7 +32,7 @@ namespace BoilerplateProject
                 cfg => cfg.AddMaps(thisAssembly)
             );
 
-            Configuration.Modules.AbpBlobStoring().Containers.Configure<AbpBlobStoringOptions>(options =>
+            Configuration.Modules.AbpBlobStoring().Containers.Configure<ProductPictureContainer>(options =>
             {
                 options.UseFileSystem(fileSystem =>
                 {
