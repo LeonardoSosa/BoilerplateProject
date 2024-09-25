@@ -95,6 +95,7 @@
                             name="unitPrice_{{i}}"
                             id="unitPrice_{{i}}"
                             required
+                            (input)="updatePrice($event, ordered)"
                             [(ngModel)]="order.orderedProducts[i].unitPrice"
                             #unitPriceModel="ngModel"
                             #unitPriceEl
@@ -109,12 +110,13 @@
                         <div class="col-md-9">
                           <input
                             type="number"
-                            min="0"
+                            min="1"
                             [attr.max]="getStockAmount(order.orderedProducts[i])"
                             class="form-control"
                             name="amount_{{i}}"
                             id="amount_{{i}}"
                             required
+                            (input)="updateAmount($event, ordered)"
                             [(ngModel)]="order.orderedProducts[i].amount"
                             #amountModel="ngModel"
                             #amountEl
@@ -146,7 +148,6 @@
             class="form-horizontal"
             autocomplete="off"
             #CreateOrderedProductForm="ngForm"
-            (ngSubmit)="save()"
           >
             <div class="form-group row required">
               <label class="col-md-3 col-form-label" for="productId">

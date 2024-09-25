@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Injector, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AppComponentBase } from '@shared/app-component-base';
 import { OrderDto, OrderedProductDto, OrderServiceProxy, ProductDto, ProductDtoPagedResultDto, ProductServiceProxy, UpdateOrderDto } from '@shared/service-proxies/service-proxies';
@@ -29,6 +29,27 @@ export class EditOrderDialogComponent extends AppComponentBase implements OnInit
     public bsModalRef: BsModalRef
   ) {
     super(injector);
+  }
+  protected updateAmount(event, ordered: OrderedProductDto) {
+    ordered.subtotal = ordered.unitPrice * event.target.value;
+    
+    this.order.totalItems = 0;
+    this.order.total = 0;
+    for (var ordered of this.order.orderedProducts) {
+      this.order.totalItems += ordered.amount;
+      this.order.total += ordered.subtotal;
+    }
+  }
+
+  protected updatePrice(event, ordered: OrderedProductDto) {
+    ordered.subtotal = event.target.value * ordered.amount;
+    
+    this.order.totalItems = 0;
+    this.order.total = 0;
+    for (var ordered of this.order.orderedProducts) {
+      this.order.totalItems += ordered.amount;
+      this.order.total += ordered.subtotal;
+    }
   }
   
   ngOnInit(): void {
@@ -133,7 +154,9 @@ export class EditOrderDialogComponent extends AppComponentBase implements OnInit
   }
 
   protected getStockAmount(ordered: OrderedProductDto) {
-    // address method being called multiple times for each click on ui
+    if (this.activeProducts == null) {
+      return 0;
+    }
     let result = this.activeProducts.find(x => x.id == ordered.productId);
     return result ? result.stockAmount : 0;
   }
